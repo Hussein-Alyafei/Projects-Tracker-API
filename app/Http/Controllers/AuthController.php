@@ -23,7 +23,7 @@ class AuthController extends Controller
         return response()->json([
             'message' => 'The account created successfully',
             'token' => $token
-        ], 201);
+        ], 200);
     }
 
 
@@ -42,20 +42,15 @@ class AuthController extends Controller
         return response()->json([
             'message' => 'Authenticated',
             'token' => $token
-        ], 201);
+        ], 200);
     }
 
     public function logout(Request $request)
     {
-        if (!$request->user()) {
-            return response()->json([
-                'message' => 'Unauthorized',
-            ], 401);
-        }
         $request->user()->currentAccessToken()->delete();
 
         return response()->json([
             'message' => 'Successfully logged out',
-        ], 201);
+        ], 200);
     }
 }

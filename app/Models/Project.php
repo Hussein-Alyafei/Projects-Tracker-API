@@ -19,6 +19,7 @@ class Project extends Model
         'gitHub_url',
         'documentation',
         'description',
+        'user_id'
     ];
 
     public function user() {

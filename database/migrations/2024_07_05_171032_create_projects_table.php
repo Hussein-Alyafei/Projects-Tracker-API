@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->enum('status', ['complete', 'in-progress', 'stopped', 'planned', 'on hold', 'cancelled']);
+            $table->enum('status', ['completed', 'in-progress', 'stopped', 'planned', 'on hold', 'cancelled']);
             $table->enum('year', ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh']);
             $table->enum('term', ['first', 'second']);
             $table->date('deadline');

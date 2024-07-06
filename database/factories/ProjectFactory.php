@@ -22,12 +22,12 @@ class ProjectFactory extends Factory
         $user = $users->random(); // Get a random user
         return [
             'title' => $title = fake()->words(5, true),
-            'status' => fake()->randomElement(['complete', 'in-progress', 'stopped', 'planned', 'on hold', 'cancelled']),
+            'status' => fake()->randomElement(['completed', 'in-progress', 'stopped', 'planned', 'on hold', 'cancelled']),
             'year' => fake()->randomElement(['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh']),
             'term' => fake()->randomElement(['first', 'second']),
             'deadline' => fake()->dateTimeBetween('2022-01-01', '2026-12-31')->format('Y-m-d'),
-            'gitHub_url' => $this->generateGitHubUrl($user->name,$title),
-            'documentation' => $title .'.pdf',
+            'gitHub_url' => $this->generateGitHubUrl($user->name, $title),
+            'documentation' => $title . '.pdf',
             'description' => fake()->paragraph(),
             'user_id' => $user->id,
         ];
@@ -35,7 +35,7 @@ class ProjectFactory extends Factory
 
     private function generateGitHubUrl($username, $title)
     {
-        $title = str_replace(' ', '-' ,$title);
+        $title = str_replace(' ', '-', $title);
         $username = str_replace(' ', '-', $username);
         return "https://www.github.com/{$username}/{$title}";
     }
