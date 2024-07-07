@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Filters\ProjectFilter;
 use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
@@ -18,14 +19,16 @@ class ProjectController extends Controller
         return Auth::user()->id;
     }
 
-
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(ProjectFilter $filters)
     {
-        $projects = Project::query()->where('user_id', $this->getUserId())->get();
-        return  ProjectResource::collection($projects);
+        $projects = Project::query()
+            ->where('user_id', $this->getUserId())
+            ->filter($filters)
+            ->paginate();
+        return ProjectResource::collection($projects);
     }
 
     /**
