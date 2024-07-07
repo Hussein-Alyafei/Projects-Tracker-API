@@ -7,17 +7,9 @@ use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Http\Resources\ProjectResource;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class ProjectController extends Controller
+class ProjectController extends ApiController
 {
-
-
-    private function getUserId(): int
-    {
-        return Auth::user()->id;
-    }
 
     /**
      * Display a listing of the resource.
@@ -45,10 +37,8 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        if ($this->getUserId() !== $project->user_id) {
-            return response()->json([
-                'message' => 'Unauthorized to show this project',
-            ], 403);
+        if (!$this->isAble($project)) {
+            return $this->notAuthorized('Unauthorized to show this project');
         }
 
         return new ProjectResource($project);
@@ -59,10 +49,8 @@ class ProjectController extends Controller
      */
     public function update(UpdateProjectRequest $request, Project $project)
     {
-        if ($this->getUserId() !== $project->user_id) {
-            return response()->json([
-                'message' => 'Unauthorized to edit this project',
-            ], 403);
+        if (!$this->isAble($project)) {
+            return $this->notAuthorized('Unauthorized to edit this project');
         }
 
         $project->update($request->mappedAttributes());
@@ -74,15 +62,11 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-        if ($this->getUserId() !== $project->user_id) {
-            return response()->json([
-                'message' => 'Unauthorized to delete this project',
-            ], 403);
+        if (!$this->isAble($project)) {
+            return $this->notAuthorized('Unauthorized to delete this project');
         }
 
         $project->delete();
-        return response()->json([
-            'message' => "Successfully deleted",
-        ], 200);
+
     }
 }

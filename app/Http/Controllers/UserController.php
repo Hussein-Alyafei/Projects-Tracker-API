@@ -5,17 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use PhpParser\Node\Stmt\Echo_;
 
-class UserController extends Controller
+class UserController extends ApiController
 {
-
-    private function getUserId(): int
-    {
-        return Auth::user()->id;
-    }
 
     /**
      * Display the details of the resource.
@@ -32,9 +25,7 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
         if ($this->getUserId() !== $user->id) {
-            return response()->json([
-                'message' => 'Unauthorized to edit this user',
-            ], 403);
+            return $this->notAuthorized('Unauthorized to edit this user');
         }
 
         $user->update($request->mappedUserAttributes());
@@ -47,12 +38,11 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         if ($this->getUserId() !== $user->id) {
-            return response()->json([
-                'message' => 'Unauthorized to delte this user',
-            ], 403);
+            return $this->notAuthorized('Unauthorized to delete this user');
+
         }
 
         $user->delete();
-        return response()->json(['message' => 'User deleted successfully']);
+        return $this->ok("User deleted successfully");
     }
 }

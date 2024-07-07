@@ -8,8 +8,9 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 
-class AuthController extends Controller
+class AuthController extends ApiController
 {
+
     public function register(RegisterRequest $request)
     {
         $user = User::create([
@@ -20,10 +21,7 @@ class AuthController extends Controller
 
         $token = $user->createToken('API token for ' . $user->email)->plainTextToken;
 
-        return response()->json([
-            'message' => 'The account created successfully',
-            'token' => $token
-        ], 200);
+        return $this->ok("The account created successfully", ['token' => $token]);
     }
 
 
@@ -39,18 +37,13 @@ class AuthController extends Controller
 
         $token = $user->createToken('API token for ' . $user->email)->plainTextToken;
 
-        return response()->json([
-            'message' => 'Authenticated',
-            'token' => $token
-        ], 200);
+        return $this->ok("The account logged in successfully", ['token' => $token]);
     }
 
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
 
-        return response()->json([
-            'message' => 'Successfully logged out',
-        ], 200);
+        return $this->ok("Successfully logged out");
     }
 }
